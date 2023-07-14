@@ -1,0 +1,53 @@
+services:
+  api:
+    build: fastapi
+    restart: always
+    ports:
+      - "1000:1000"
+    networks:
+      - backnet
+      - frontnet
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail localhost:1000 || exit 1"]
+      interval: 3m
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  frontend:
+    build: frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - frontnet
+    depends_on:
+      - api
+  proxy:
+    build: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 3m
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    depends_on:
+      - api
+    networks:
+      - backnet
+      - frontnet
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+networks:
+  backnet:
+  frontnet:

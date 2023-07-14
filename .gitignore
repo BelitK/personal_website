@@ -1,0 +1,7 @@
+/dock
+__pycache__
+fllk
+**/.env
+.trunk
+.vscode
+/certbot
