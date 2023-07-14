@@ -12,6 +12,7 @@ const Projects = () => {
           <Project name="E-Commerce Volume Comparison" desc="A comparison between turkish and american e-commerce market volumes" url="https://github.com/BelitK/E-CommerceVolume" />
           <Project name="BlockchainExample" desc="Blockchain example project" url="https://github.com/BelitK/blockchainexample" />
           <Project name="Fire Detection Project" desc="Fire detection using Yolov3" url="https://github.com/BelitK/MLcourse" />
+          <Project name="Personel Website" desc="Personel Website" url="https://github.com/BelitK/personel_website" />
         </main>
       </Layout>
     </>
