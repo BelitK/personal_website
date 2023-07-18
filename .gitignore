@@ -5,3 +5,5 @@ fllk
 .trunk
 .vscode
 /certbot
+*/apienv
+**/*.weights

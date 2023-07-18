@@ -12,7 +12,7 @@ services:
       interval: 3m
       timeout: 30s
       retries: 5
-      start_period: 30s
+      start_period: 45s
   frontend:
     build: frontend
     restart: always
