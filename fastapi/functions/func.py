@@ -8,7 +8,7 @@ class Fire:
     def __init__(self):
         if not pth.isfile("functions/yolov3_training_last.weights"):
             url = "https://drive.google.com/file/d/1-0TlVCTUg6p32wBdYQpQ6bs-9f-g_yZR/view?usp=sharing"
-            output = "functions/yolov3_training_last.weight"
+            output = "functions/yolov3_training_last.weights"
             gdown.download(url, output, quiet=True, fuzzy=True)
         self.net = cv2.dnn.readNetFromDarknet(
             "functions/yolov3.cfg", "functions/yolov3_training_last.weights"
