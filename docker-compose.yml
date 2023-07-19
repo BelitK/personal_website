@@ -3,6 +3,7 @@ services:
     build:
       context: ./fastapi
       dockerfile: Dockerfile
+    image : fastapi
     restart: always
     ports:
       - "1000:1000"
