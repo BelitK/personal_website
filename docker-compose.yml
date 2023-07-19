@@ -20,6 +20,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    image: frontend
     restart: always
     ports:
       - "3000:3000"
