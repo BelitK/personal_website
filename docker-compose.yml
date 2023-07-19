@@ -30,6 +30,7 @@ services:
       - api
   proxy:
     build: nginx:1.25.1-alpine
+    image: nginx-proxy
     restart: always
     ports:
       - 80:80
