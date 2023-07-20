@@ -29,8 +29,7 @@ services:
     depends_on:
       - api
   proxy:
-    build: nginx:1.25.1-alpine
-    image: nginx-proxy
+    image: nginx:latest
     restart: always
     ports:
       - 80:80
