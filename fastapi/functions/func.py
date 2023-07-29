@@ -4,6 +4,7 @@ import gdown
 import numpy as np
 import os.path as pth
 
+
 class Fire:
     def __init__(self):
         if not pth.isfile("functions/yolov3_training_last.weights"):
