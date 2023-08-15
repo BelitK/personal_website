@@ -1,4 +1,4 @@
-# Personel Website
+# Personal Website
 
 Created while learning docker and such, personel website hosting on docker
 
