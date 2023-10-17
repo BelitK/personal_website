@@ -28,7 +28,7 @@ async def hi():
 
 @app.get("/certs", response_model=List[Certificate])
 async def read_certs():
-    query = Certificates.select().order_by(Certificates.c.id.desc())
+    query = Certificates.select().order_by(Certificates.c.id.asc())
     return await database.fetch_all(query)
 
 
