@@ -3,10 +3,10 @@ services:
     build:
       context: ./fastapi
       dockerfile: Dockerfile
-    image : fastapi
+    image: fastapi
     restart: always
     ports:
-      - "1000:1000"
+      - 1000:1000
     networks:
       - backnet
       - frontnet
@@ -23,7 +23,7 @@ services:
     image: frontend
     restart: always
     ports:
-      - "3000:3000"
+      - 3000:3000
     networks:
       - frontnet
     depends_on:
@@ -54,6 +54,35 @@ services:
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
+  streamlit:
+    build:
+      context: ./streamlit
+      dockerfile: Dockerfile
+    image: streamlit
+    restart: always
+    ports:
+      - 4000:4000
+    networks:
+      - frontnet
+      - backnet
+    depends_on:
+      - api
+  # reverse-proxy:
+  #   # The official v2 Traefik docker image
+  #   image: traefik:v2.10
+  #   # Enables the web UI and tells Traefik to listen to docker
+  #   command: --api.insecure=true --providers.docker
+  #   ports:
+  #     # The HTTP port
+  #     - "80:80"
+  #     # The Web UI (enabled by --api.insecure=true)
+  #     - "8080:8080"
+  #   volumes:
+  #     # So that Traefik can listen to the Docker events
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   networks:
+  #     - backnet
+  #     - frontnet
 networks:
   backnet:
   frontnet:
