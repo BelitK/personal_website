@@ -7,3 +7,4 @@ fllk
 /certbot
 */apienv
 **/*.weights
+*/.venv
