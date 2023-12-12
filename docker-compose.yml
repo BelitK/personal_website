@@ -60,6 +60,8 @@ services:
       dockerfile: Dockerfile
     image: sofos
     restart: always
+    devices:
+      - '/dev/video0:/dev/video0'
     ports:
       - 8000:8000
     networks:

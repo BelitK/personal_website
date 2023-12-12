@@ -1,0 +1,31 @@
+<body>
+
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-8  offset-lg-2">
+  
+        
+              <h2 class="mt-5">Sevap Sayar</h2>
+        <form method="post" action="{{ url_for('tasks') }}">
+        <input type="submit" value="Stop/Start" name="stop" />
+        <input type="submit" value="QR Start/Stop" name="neg" />
+        <input type="submit" value="Start/Stop Recording" name="rec" />
+        </form>
+              <img src="{{ url_for('video_feed') }}" height="80%" width="80%">
+        <h3 style="font-family:courier;">Instructions:</h3>
+        <ol style="font-family:courier;">
+        <div>Numara =<div id="this-div"></div></div>
+        <form method="post" action="{{ url_for('token') }}"> 
+            <textarea name="textbox" ></textarea>
+            <button type="submit" value="token" name="submit">Submit</button>
+        </form>        
+          </div>
+      </div>
+  </div>
+  </body>
+  <script>
+    var targetContainer = document.getElementById("this-div");
+    var eventSource = new EventSource("/stream");eventSource.onmessage = function(e) {
+        targetContainer.innerHTML = e.data;
+    };
+    </script>
