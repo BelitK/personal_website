@@ -20,7 +20,7 @@ class db:
         return self.curr.fetchall()
 
     def get_token(self, number: str):
-        if number!='0' and number!='':
+        if number!='0' and number!=''and number.isdigit():
             self.get_cursor()
             
             self.curr.execute(f"select * from guests where renum={number};")
@@ -31,8 +31,8 @@ class db:
                 self.conn.commit()
 
             self.curr.close()
-            return data[6]
-        return 'No number'
+            return data[6], data[1],str(data[5])
+        return 'No Name', 'No Number', 'No Code'
     
     def update_token(self,number:str, tokens:int):
         self.get_cursor()
@@ -46,30 +46,7 @@ class person:
     def __init__(self) -> None:
         self.renum = "0"
         self.token="0"
+        self.name = "None"
 
     def info(self):
         return self.renum, self.token
-    
-
-# import pandas as pd
-import psycopg2
-conn = psycopg2.connect(
-            host="173.212.221.185",
-            port="5555",
-            database="sofos",
-            user="belit",
-            password="12897",
-        )
-cur = conn.cursor()
-import pandas as pd
-data = pd.read_excel('a.xlsx')
-data.columns=['isim','davet','telefon','mail','rev']
-
-renum = 10367
-id=367
-for person in data.iterrows():
-    if str(person[1]['isim'])!='nan':
-        renum+=1
-        id+=1
-        print(person[1]['isim'])
-        cur.execute(f"insert into guests (id, name, phone, checkin,renum,tokens) values('{str(id)}','{person[1]['isim']}','{str(person[1]['telefon'])}','False','{str(renum)}',0)")

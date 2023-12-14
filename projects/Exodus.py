@@ -1,25 +1,84 @@
-from dash import Dash, html, dcc, callback, Output, Input
-import plotly.express as px
-import pandas as pd
+import av
+import cv2
+import datetime, time
+from db import db, person
+import streamlit as st
+from streamlit_webrtc import WebRtcMode, webrtc_streamer
 
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
 
-app = Dash(__name__)
+global switch, neg, qr_code
+neg=True
+switch=1
+qr_code="0"
+
+person = person()
+
+qcd = cv2.QRCodeDetector()
+#db_con = db()
+
+def callback(frame: av.VideoFrame) -> av.VideoFrame:
+    global qr_code
+    person.token= person.token+'a'
+    img = frame.to_ndarray(format="bgr24")
+    retval, decoded_info, points, straight_qrcode = qcd.detectAndDecodeMulti(img)
+                # decc = decode(frame)
+    frame= cv2.putText(frame,'abc', (30,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
+    if retval:
+        frame= cv2.putText(frame,decoded_info[0], (0,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255))
+        if qr_code!= decoded_info[0]:
+            qr_code= decoded_info[0]
+    frame= cv2.pyrUp(cv2.pyrUp(frame))
+    return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
 
-app.layout = html.Div([
-    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
-    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
-    dcc.Graph(id='graph-content')
-])
 
-@callback(
-    Output('graph-content', 'figure'),
-    Input('dropdown-selection', 'value')
+
+# def callback(frame: av.VideoFrame) -> av.VideoFrame:
+#     img = frame.to_ndarray(format="bgr24")
+
+#     if _type == "noop":
+#         pass
+#     elif _type == "cartoon":
+#         # prepare color
+#         img_color = cv2.pyrDown(cv2.pyrDown(img))
+#         for _ in range(6):
+#             img_color = cv2.bilateralFilter(img_color, 9, 9, 7)
+#         img_color = cv2.pyrUp(cv2.pyrUp(img_color))
+
+#         # prepare edges
+#         img_edges = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+#         img_edges = cv2.adaptiveThreshold(
+#             cv2.medianBlur(img_edges, 7),
+#             255,
+#             cv2.ADAPTIVE_THRESH_MEAN_C,
+#             cv2.THRESH_BINARY,
+#             9,
+#             2,
+#         )
+#         img_edges = cv2.cvtColor(img_edges, cv2.COLOR_GRAY2RGB)
+
+#         # combine color and edges
+#         img = cv2.bitwise_and(img_color, img_edges)
+#     elif _type == "edges":
+#         # perform edge detection
+#         img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
+#     elif _type == "rotate":
+#         # rotate image
+#         rows, cols, _ = img.shape
+#         M = cv2.getRotationMatrix2D((cols / 2, rows / 2), frame.time * 45, 1)
+#         img = cv2.warpAffine(img, M, (cols, rows))
+
+#     return av.VideoFrame.from_ndarray(img, format="bgr24")
+
+
+webrtc_streamer(
+    key="opencv-filter",
+    mode=WebRtcMode.SENDRECV,
+    video_frame_callback=callback,
+    media_stream_constraints={"video": True, "audio": False},
+    async_processing=True,
 )
-def update_graph(value):
-    dff = df[df.country==value]
-    return px.line(dff, x='year', y='pop')
-
-if __name__ == '__main__':
-    app.run(debug=True)
+labels_placeholder = st.empty()
+while True:
+    labels_placeholder.write(person.token)
+    time.sleep(0.1)

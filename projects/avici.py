@@ -1,4 +1,3 @@
-from flask import Flask, render_template, Response, request, redirect, url_for
 import cv2
 import datetime, time
 from db import db, person
