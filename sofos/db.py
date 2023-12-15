@@ -45,6 +45,7 @@ class db:
 class person:
     def __init__(self) -> None:
         self.renum = "0"
+        self.oldrenum="0"
         self.token="0"
         self.name = "None"
 

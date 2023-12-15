@@ -8,8 +8,6 @@ db_con = db()
 person = person()
 
 
-global qr_code
-qr_code = '0'
 
 @app.route("/")
 def home():
@@ -27,10 +25,9 @@ def index():
 
 @app.route('/process', methods=['POST'])
 def process_qr_code():
-    global qr_code
     data = request.get_json()
     content = data.get('content', '')
-    qr_code=content
+    person.renum=content
     # Process the QR code content here (e.g., print or save it)
     print(f"QR Code Content: {content}")
     return jsonify({'status': 'success'})
@@ -42,10 +39,11 @@ def stream():
             # wait for source data to be available, then push it
             #print(f"info={person.renum}")
             time.sleep(0.5)
-            if qr_code!=person.renum:
+            if person.oldrenum!=person.renum:
                 #person.renum=qr_code
                 # print(person.token)
-                person.token, person.name, person.renum=db_con.get_token(qr_code)
+                person.renum=person.oldrenum
+                person.token, person.name, person.renum=db_con.get_token(person.renum)
                 print(person.renum)
                 yield 'data: {}\n\n'.format(person.name+" "+person.renum+" "+str(person.token))
             yield 'data: {}\n\n'.format(person.name+" "+person.renum+" "+str(person.token))
@@ -55,6 +53,8 @@ def stream():
 def token():
     if request.method == 'POST':
         form_data = request.form
+        if form_data['textbox'] == '': 
+            return redirect(url_for("index"))
         person.token = str(int(person.token)+int(form_data['textbox']))
         # embed()
         # print(form_data[0][2])
