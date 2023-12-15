@@ -7,48 +7,22 @@
 </head>
 <body>
     <h1>QR Code Reader</h1>
-    <video id="preview" width="50%" height="50%"></video>
+    <video id="scanner" width="50%" height="50%"></video>
 
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 
 
     <div>Bilgiler : </div><div id="result"></div>
     <form method="post" action="{{ url_for('token') }}"> 
-        <textarea name="textbox" ></textarea>
+        <input type="text" id="renum" name="renum" value="None"><br>
+        <input type="number" id="token" name="token"></input><br>
         <button type="submit" value="token" name="submit">Submit</button>
     </form>        
       </div>
 
-
-
-
-
-<div id="result"></div>
-
-<script>
-function handleStream() {
-    const resultElement = document.getElementById('result');
-
-    // Make a request to the streaming endpoint
-    const eventSource = new EventSource('/stream');
-
-    // Handle the data received from the server
-    eventSource.onmessage = function(event) {
-        resultElement.innerHTML = event.data + '<br>';
-    };
-
-    // Handle the stream closure
-    eventSource.onerror = function(event) {
-        if (event.readyState === EventSource.CLOSED) {
-            console.log('Connection closed.');
-        }
-    };
-}
-
-// Start streaming data when the page loads
-document.addEventListener('DOMContentLoaded', handleStream);
-</script>
 </body>
 
 </html>

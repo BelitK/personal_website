@@ -19,7 +19,7 @@ class db:
     def fetchh(self):
         return self.curr.fetchall()
 
-    def get_token(self, number: str):
+    def get_token(self, number: str, just_token=False):
         if number!='0' and number!=''and number.isdigit():
             self.get_cursor()
             
@@ -29,15 +29,22 @@ class db:
             if data[4]=='False':
                 self.curr.execute(f'update guests set checkin=True where renum={number}')
                 self.conn.commit()
-
+                
             self.curr.close()
-            return data[6], data[1],str(data[5])
-        return 'No Name', 'No Number', 'No Code'
+            if just_token:
+                return data[6]
+
+            print(f"{str(data[5])} has {data[6]} tokens")
+            return data[6], data[1],str(data[5]), 'OK' if str(data[4])=='true' else 'None'
+        return 'No Name', 'No Number', 'No Code', 'No Checkin'
     
     def update_token(self,number:str, tokens:int):
         self.get_cursor()
+        print("update tokennnnnn")
+        print(number)
         self.curr.execute(f'update guests set tokens={tokens} where renum={number}')
         self.conn.commit()
+        print(f"{tokens} added to {number}")
         self.curr.close()
 
     # generate_qr(person[5])
@@ -48,6 +55,5 @@ class person:
         self.oldrenum="0"
         self.token="0"
         self.name = "None"
+        self.checkin='False'
 
-    def info(self):
-        return self.renum, self.token
