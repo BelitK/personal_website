@@ -1,3 +1,4 @@
+import os
 import time
 from db import db, person
 from flask import Flask, render_template, request, jsonify, Response, redirect, url_for
@@ -5,6 +6,7 @@ from flask import Flask, render_template, request, jsonify, Response, redirect, 
 app = Flask(__name__)
 db_con = db()
 person = person()
+
 
 global qr_code
 qr_code = '0'
