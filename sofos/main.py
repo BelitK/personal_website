@@ -1,5 +1,5 @@
 from db import db, person
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, send_file
 
 app = Flask(__name__)
 db_con = db()
@@ -20,6 +20,20 @@ def kommunity():
 def index():
     return render_template("index.html")
 
+@app.route('/kommunity/<id>')
+def show_image(id):
+    # Assuming your image is in the 'static' folder
+    # ornek lal_pekin
+    image_path = f'static/images/{id}.jpeg'
+
+    # Specify the content type for the response (e.g., image/jpeg)
+    content_type = 'image/jpeg'
+
+    # Send the image file as a response
+    try:
+        return send_file(image_path, mimetype=content_type)
+    except:
+        return redirect(url_for('home'))
 
 @app.route("/process", methods=["POST"])
 def process_qr_code():
