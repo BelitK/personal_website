@@ -34,6 +34,19 @@ def show_image(id):
         return send_file(image_path, mimetype=content_type)
     except:
         return redirect(url_for('home'))
+    
+@app.route('/kommunity/hamson')
+def show_pdf():
+    # Assuming your image is in the 'static' folder
+    # ornek lal_pekin
+    image_path = 'static/images/Hamson.pdf'
+
+
+    # Send the image file as a response
+    try:
+        return send_file(image_path)
+    except:
+        return redirect(url_for('home'))
 
 @app.route("/process", methods=["POST"])
 def process_qr_code():
