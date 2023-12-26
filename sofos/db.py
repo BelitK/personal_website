@@ -21,7 +21,12 @@ class db:
         self.curr = self.conn.cursor()
 
     def fetchh(self):
-        return self.curr.fetchall()
+        self.get_cursor()
+        self.curr.execute(f'select * from {self.table}')
+        data = self.curr.fetchall()
+        self.curr.close()
+        self.conn.close()
+        return data
 
     def get_token(self, number: str, just_token=False):
         if number != "0" and number != "" and number.isdigit():

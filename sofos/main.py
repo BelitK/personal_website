@@ -20,6 +20,10 @@ def kommunity():
 def index():
     return render_template("index.html")
 
+@app.route("/davetliler")
+def davetli():
+    data = db_con.fetchh()
+    return render_template("shwall.html", veri =data)
 
 @app.route("/kommunity/<id>")
 def show_image(id):
