@@ -20,33 +20,35 @@ def kommunity():
 def index():
     return render_template("index.html")
 
-@app.route('/kommunity/<id>')
+
+@app.route("/kommunity/<id>")
 def show_image(id):
     # Assuming your image is in the 'static' folder
     # ornek lal_pekin
-    image_path = f'static/images/{id}.jpeg'
+    image_path = f"static/images/{id}.jpeg"
 
     # Specify the content type for the response (e.g., image/jpeg)
-    content_type = 'image/jpeg'
+    content_type = "image/jpeg"
 
     # Send the image file as a response
     try:
         return send_file(image_path, mimetype=content_type)
     except:
-        return redirect(url_for('home'))
-    
-@app.route('/kommunity/hamson')
+        return redirect(url_for("home"))
+
+
+@app.route("/kommunity/hamson")
 def show_pdf():
     # Assuming your image is in the 'static' folder
     # ornek lal_pekin
-    image_path = 'static/images/Hamson.pdf'
-
+    image_path = "static/images/Hamson.pdf"
 
     # Send the image file as a response
     try:
         return send_file(image_path)
     except:
-        return redirect(url_for('home'))
+        return redirect(url_for("home"))
+
 
 @app.route("/process", methods=["POST"])
 def process_qr_code():
@@ -78,41 +80,32 @@ def process_qr_code():
     return jsonify(result)
 
 
-# @app.route('/stream')
-# def stream():
-#     def eventStream():
-#         while True:
-#             # wait for source data to be available, then push it
-#             #print(f"info={person.renum}")
-#             time.sleep(0.5)
-#             if person.oldrenum!=person.renum:
-#                 #person.renum=qr_code
-#                 # print(person.token)
-#                 person.renum=person.oldrenum
-#                 person.token, person.name, person.renum=db_con.get_token(person.renum)
-#                 print(person.renum)
-#                 yield 'data: {}\n\n'.format(person.name+" "+person.renum+" "+str(person.token))
-#             yield 'data: {}\n\n'.format(person.name+" "+person.renum+" "+str(person.token))
-#     return Response(eventStream(), mimetype="text/event-stream")
+@app.route("/new_in")
+@app.route("/new_in/<name>")
+@app.route("/new_in/<name>&<Kaydeden>&<id>")
+def add_in(name="None", Kaydeden="None", id="None"):
+    print(name, Kaydeden, id)
 
-# # SocketIO event handler for text broadcasting
-# @socketio.on('broadcast_text')
-# def handle_broadcast_text():
-#     def eventStream():
-#         while True:
-#             # wait for source data to be available, then push it
-#             #print(f"info={person.renum}")
-#             time.sleep(0.5)
-#             if person.oldrenum!=person.renum:
-#                 #person.renum=qr_code
-#                 # print(person.token)
-#                 person.renum=person.oldrenum
-#                 person.token, person.name, person.renum=db_con.get_token(person.renum)
-#                 print(person.renum)
-#                 yield 'data: {}\n\n'.format(person.name+" "+person.renum+" "+str(person.token))
-#             yield 'data: {}\n\n'.format(person.name+" "+person.renum+" "+str(person.token))
-#     print(f"Received message: {eventStream()}")
-#     socketio.emit('display_text', eventStream(), broadcast=True)
+    return render_template("new_in.html", name=name, kaydet=Kaydeden, id=id)
+
+
+@app.route("/new_invite", methods=["POST", "GET"])
+def add_invite():
+    if request.method == "POST":
+        form_data = request.form
+        # print('formdata::::')
+        isim = form_data.get("isim")
+        kaydeden = form_data.get("kaydeden")
+        print(form_data)
+        if isim == "":
+            return redirect(url_for("add_in", name="bos giris yapma"))
+        id = db_con.insert_new(name=isim, ekleyen=kaydeden)
+        print(id)
+        # print(form_data)
+        # if form_data["token"] == "":
+        #     return redirect(url_for("add_in",name=isim, Kaydeden=kaydeden))
+        return redirect(url_for("add_in", name=isim, Kaydeden=kaydeden, id=id))
+    return redirect(url_for("add_in"))
 
 
 @app.route("/token", methods=["POST", "GET"])
@@ -127,6 +120,7 @@ def token():
         tokenn, numm = db_con.get_token(number=renum_num, just_token=True)
         tokenn = str(int(tokenn) + int(form_data["token"]))
         db_con.update_token(numm, tokenn)
+        person.oldrenum = ""
         return redirect(url_for("index"))
 
 

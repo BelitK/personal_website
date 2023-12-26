@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Invite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div>Bilgiler : </div><div>{{name}},{{kaydet}},{{id}}</div>
+<form method="post" action="{{ url_for('add_invite') }}"> 
+    <input type="text" id="isim" name="isim" placeholder="isim"><br>
+    <input type="text" id="kaydeden" name="kaydeden" placeholder="kaydeden"></input><br>
+    <button type="submit" value="subb" name="submit">Submit</button>
+</form>
+<div>link =  https://quickchart.io/qr?text={{id}}</div>
+<div>qr =</div>
+<img src="https://quickchart.io/qr?text={{id}}">     
+  </div>
+</body>
+</html>
