@@ -20,11 +20,11 @@ def kommunity():
 def index():
     return render_template("index.html")
 
-@app.route("/davetiye/<id>")
+@app.route("/davetiye/<id>/<isim>")
 # @app.route("/davetiye/<id>")
-def davet(id=None):
-    print(id)
-    return render_template("davetiye.html",qr=id)
+def davet(id=None, isim=None):
+    print(id, isim)
+    return render_template("davetiye.html",qr=id, name = isim)
 
 @app.route("/davetliler")
 def davetli():
