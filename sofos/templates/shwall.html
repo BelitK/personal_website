@@ -23,6 +23,7 @@
         <th>QR Link</th>
         <th>QR</th>
         <th>Davetiye</th>
+        <th>pdf indir</th>
     </tr>
     </thead>    
     <tbody>
@@ -35,6 +36,7 @@
                 <td>https://quickchart.io/qr?text={{row[3]}}</td>
                 <td><img src="https://quickchart.io/qr?text={{row[3]}}"></td>
                 <td><a href="/davetiye/{{row[3]}}/{{row[1]}}">davet link</td>
+                <td><a href="https://www.sejda.com/html-to-pdf?save-link=https://sofosentertainment.com/davetiye/{{row[3]}}/{{row[1]}}&usePrintMedia=True">Save as PDF</a></td>
             </tr>
         {% endfor %}
     </tbody>
