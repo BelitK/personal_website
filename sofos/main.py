@@ -26,10 +26,15 @@ def davet(id=None, isim=None):
     print(id, isim)
     return render_template("davetiye.html",qr=id, name = isim)
 
-@app.route("/davetliler")
+@app.route("/davetliler",methods=["GET","POST"])
 def davetli():
-    data = db_con.fetchh()
-    return render_template("shwall.html", veri =data)
+    data, kisiler = db_con.queryy()
+    if request.method == "POST":
+        form = request.form
+        print(form)
+        data, kisiler = db_con.queryy(form.get('secilen'))
+
+    return render_template("shwall.html", veri =data, kisi=kisiler )
 
 @app.route("/kommunity/<id>")
 def show_image(id):

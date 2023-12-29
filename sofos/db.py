@@ -27,6 +27,20 @@ class db:
         self.curr.close()
         self.conn.close()
         return data
+    
+    def queryy(self, quer=None):
+        self.get_cursor()
+        self.curr.execute(f'select * from {self.table}')
+        data = self.curr.fetchall()
+        if quer is not None:
+            self.curr.execute(f"select * from {self.table} where kaydeden = '{quer}'")
+            data = self.curr.fetchall()
+
+        self.curr.execute(f'SELECT DISTINCT kaydeden FROM {self.table};')
+        kisiler = self.curr.fetchall()
+        self.curr.close()
+        self.conn.close()
+        return data, kisiler
 
     def get_token(self, number: str, just_token=False):
         if number != "0" and number != "" and number.isdigit():

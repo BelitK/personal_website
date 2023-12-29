@@ -13,6 +13,16 @@
         padding: 5px;
       }
 </style>
+<form method="post" action="{{ url_for('davetli') }}"> 
+    <label for="Kaydeden">Kisi Sec :</label>
+    <select name="secilen" id="seclien">
+        {% for adam in kisi %}
+      <option value="{{adam[0]}}">{{adam[0]}}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
 <table>
   <thead>
     <tr>
