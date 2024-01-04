@@ -2,7 +2,13 @@ import os
 from datetime import datetime
 
 import psycopg2
+from environs import Env
 
+env = Env()
+env.read_env()
+
+user = env("user")
+pwd = env("pwd")
 
 class db:
     def __init__(self):
@@ -10,8 +16,8 @@ class db:
             host="173.212.221.185",
             port="5555",
             database="sofos",
-            user="belit",
-            password="12897",
+            user=user,
+            password=pwd,
         )
         self.conn.autocommit = True
         self.table = "guests_new"

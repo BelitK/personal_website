@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from db.database import DataB, Certificate
 from functions.func import Fire, Human
 from functions.block import Blockchain
+from functions.check import login
 
 
 Certificates, database = DataB().stuff()
@@ -102,3 +103,7 @@ def get_type(type2):
 @app.get("/validate")
 def validate():
     return blockchain.is_chain_valid(blockchain.chain)
+
+@app.get("/check")
+def check_kargo():
+    return login()
